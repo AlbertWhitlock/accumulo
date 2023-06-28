@@ -166,6 +166,18 @@ $(document).ready(function () {
           }
           return data;
         }
+      },
+      {
+        type: 'numeric',
+        targets: 8
+      },
+      {
+        type: 'numeric',
+        targets: 9
+      },
+      {
+        type: 'numeric',
+        targets: 10
       }
     ],
     "columns": [{
