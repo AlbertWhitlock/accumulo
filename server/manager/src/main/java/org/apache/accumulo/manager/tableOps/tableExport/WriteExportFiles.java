@@ -231,10 +231,11 @@ class WriteExportFiles extends ManagerRepo {
       volumeName = volumeName.replace(":", "-");
     }
 
-    BufferedWriter distcpOut = new BufferedWriter(new OutputStreamWriter(
-        fs.create(new Path(exportDir, "distcp-" + volumeName + ".txt")), UTF_8));
+    final Path distCpDestination = new Path(exportDir, "distcp-" + volumeName + ".txt");
 
-    try {
+    try (FSDataOutputStream fsDataOutputStream = fs.create(distCpDestination);
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fsDataOutputStream, UTF_8);
+        BufferedWriter distcpOut = new BufferedWriter(outputStreamWriter)) {
       for (String file : uniqueFiles) {
         distcpOut.append(file);
         distcpOut.newLine();
@@ -242,14 +243,6 @@ class WriteExportFiles extends ManagerRepo {
 
       distcpOut.append(exportMetaFilePath.toString());
       distcpOut.newLine();
-
-      distcpOut.close();
-      distcpOut = null;
-
-    } finally {
-      if (distcpOut != null) {
-        distcpOut.close();
-      }
     }
   }
 
